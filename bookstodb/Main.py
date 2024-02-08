@@ -1,4 +1,7 @@
+from Tables import *
 from Libri_CSV_DB import *
+from Utenti_CSV_DB import *
+from Prestiti_CSV_DB import *
 
 host = "localhost"
 user = "root"
@@ -13,4 +16,6 @@ create_database(connection, "CREATE DATABASE %s" % db)
 connection = create_db_connection(host, user, pw, db)
 create_tables(connection)
 libri_to_DB("books.csv", connection)
-# libri_to_DB(file_csv, connection, 1000)
+utenti_to_DB("users.csv", connection)
+prestiti_to_DB("loan.csv", connection)
+

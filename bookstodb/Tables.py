@@ -1,4 +1,6 @@
 from FunzioniDB import *
+
+
 def create_tables(connection):
     table_books = """
     CREATE TABLE books(
@@ -10,7 +12,6 @@ def create_tables(connection):
     small_url VARCHAR(1000)
     )
     """
-
 
     table_users = """
        CREATE TABLE users(
@@ -29,10 +30,11 @@ def create_tables(connection):
         )
        """
 
-    alter_loan = '''
-           ALTER TABLE loan
-           ADD FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE ON UPDATE CASCADE,
-           ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE;'''
+    alter_loan = """
+               ALTER TABLE loan
+               ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+               ADD FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE ON UPDATE CASCADE;
+               """
 
     execute_query(connection, table_books)
     execute_query(connection, table_users)

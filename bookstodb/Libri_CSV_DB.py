@@ -1,11 +1,11 @@
 import pandas as pd
 import re
-import random
-from Tables import *
+from FunzioniDB import *
 
 
 def libri_to_DB(file, connection, righe=None):
-    ### CARICA ###
+    ## CARICA ##
+    pd.options.mode.chained_assignment = None
     books_df = pd.read_csv(file, delimiter=";", encoding="latin1", on_bad_lines='skip')[:righe]
     data_books = pd.read_csv(file, delimiter=";", encoding="latin1", on_bad_lines='skip')[:righe]
 
@@ -14,8 +14,8 @@ def libri_to_DB(file, connection, righe=None):
     # print(books_df.shape, "Dimensione DB Originale")
 
     ###PULIZIA###
-    del data_books['image_url']
-    del data_books['small_image_url']
+    # del data_books['image_url']
+    # del data_books['small_image_url']
 
     for i in books_df.index:
 
@@ -46,7 +46,8 @@ def libri_to_DB(file, connection, righe=None):
 
         pat_str = r"^[a-zA-Z0-9.,'?¿()/#&%ñ:;+-_$@! ¡]+$"
         ## PULIZIA TITLE ##
-        if bool(re.fullmatch(pat_str, books_df["original_title"][i])) is False or books_df["original_title"][i] == "NULL":
+        if bool(re.fullmatch(pat_str, books_df["original_title"][i])) is False or books_df["original_title"][
+            i] == "NULL":
             # print(books_df['Book-Title'][i])
             data_books.drop(i, inplace=True)
             continue
@@ -75,15 +76,15 @@ def libri_to_DB(file, connection, righe=None):
         #     data_books.drop(i, inplace=True)
         #     continue
 
-        ##PULIZIA IMAGE##
-        # if not books_df['Image-URL-L'][i].startswith("http://") and not books_df['Image-URL-L'][i].endswith(".jpg"):
+        # #PULIZIA IMAGE##
+        # if not books_df[''][i].startswith("http://") and not books_df['Image-URL-L'][i].endswith(".jpg"):
         #     data_books.drop(i, inplace=True)
         #     continue
 
         # if len(list(data_books.columns)) != len(list(data_books.iloc[i])):
-            # data_books.drop(i, inplace=True)
-            # print(data_books.iloc[i])
-            # continue
+        # data_books.drop(i, inplace=True)
+        # print(data_books.iloc[i])
+        # continue
 
     # print(data_books.shape, "Dimensione DB Finale")
 
@@ -93,27 +94,17 @@ def libri_to_DB(file, connection, righe=None):
     # data_images = pd.concat([data_books.pop("ISBN_img"), data_books.pop('Image-URL-L')], axis=1)
 
     ## CONVERTING DF INTO TUPLES ##
-    data_books = list(data_books.itertuples(index=False, name=None))
+    data_books = list(zip(data_books["book_id"],
+                          data_books["original_title"],
+                          data_books["authors"],
+                          data_books["year"],
+                          data_books["image_url"],
+                          data_books["small_image_url"]))
     # data_images = list(data_images.itertuples(index=False, name=None))
 
-    ## CREATE TABLES & CARICA DATI ##
-    tabelle = ["books"]
-    liste_tabelle = [data_books]
+    ## CARICARE I DATI #
 
-    for i in range(len(tabelle)):
-        query = f"INSERT INTO {tabelle[i]} VALUES ({', '.join(list(['%s'] * len(liste_tabelle[i][0])))});"
-        execute_many(connection, query, liste_tabelle[i])
+    query = f"INSERT INTO books VALUES ({', '.join(list(['%s'] * len(data_books[0])))});"
+    execute_many(connection, query, data_books)
 
 
-
-""""
-NOTES :
-(260871, 6)
-(271360, 8)
-ISBN TOTALLY WRONG 
-'0486404242	 ', '3518365479<90', '3442248027  3', '0385722206  0'
-
-ISNB (YEAR WRONG)
-078946697X DK Publishing Inc, 2070426769 Gallimard, 0789466953 DK Publishing Inc
-
-"""
