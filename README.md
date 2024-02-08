@@ -1,3 +1,3 @@
-Inseriti file csv che si useranno nel progetto 
+Inseriti file csv che si useranno nel progetto [Benedetta]  
 
-[Benedetta]  File del progetto PyCharm completati e DB riempito [Benedetta]
+File del progetto PyCharm completati e DB riempito [Benedetta]
