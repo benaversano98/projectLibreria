@@ -72,7 +72,8 @@ def homepage():
     #
     # ### RENDER ####
     # content = {"carousel": carousel, "tst": top_selected_type, 'tsc': top_selected_content, "rg": recomendation_genre, "rc": recomendation_content}
-    return render_template("home.html")
+    list_books = api_books()
+    return render_template("home.html", list_books=list_books)
 
 
 ################################ GENRES GENRES GENRES GENRES GENRES GENRES GENRES GENRES GENRES #######################
@@ -80,7 +81,7 @@ def homepage():
 def api_books():
     query_lg = 'SELECT * FROM books'
     list_books = execute_query(query_lg)
-    return jsonify(list_books)
+    return list_books
 
 @app.route("/api/users")
 def api_users():
