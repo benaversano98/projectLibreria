@@ -15,7 +15,7 @@ def create_tables(connection):
 
     table_users = """
        CREATE TABLE users(
-        id BIGINT PRIMARY KEY,
+        id BIGINT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(255),
         date_of_birth DATE
         )
@@ -23,7 +23,7 @@ def create_tables(connection):
 
     table_loan = """
        CREATE TABLE loan(
-        id BIGINT PRIMARY KEY,
+        id BIGINT PRIMARY KEY AUTO_INCREMENT,
         book_id BIGINT,
         user_id BIGINT,
         date_of_loan DATE
