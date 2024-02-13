@@ -1,6 +1,5 @@
 import mysql.connector
 from flask import Flask, jsonify, render_template, request
-from math import ceil
 
 app = Flask(__name__)
 
@@ -43,7 +42,7 @@ def homepage():
         codice = request.form.get('Search')
         if codice:
             list_books = execute_query(
-                f"SELECT * FROM books WHERE title LIKE '%{codice}%' OR author LIKE '%{codice}% LIMIT {limit} OFFSET {offset}'")
+                f"SELECT * FROM books WHERE title LIKE '%{codice}%' OR author LIKE '%{codice}%'")
     image, frase = "https://img00.deviantart.net/9088/i/2007/223/7/d/no_books_by_applejoan.jpg", "Non ci sono libri a questa ricerca."
     return render_template("home.html", image=image, frase=frase, list_books=list_books, len=len, flag=flag)
 
@@ -52,13 +51,6 @@ def homepage():
 def api_books():
     query_lg = f'SELECT * FROM books'
     list_books = execute_query(query_lg)
-    return list_books
-
-
-@app.route("/api/books/<nome>")
-def api_books_nome(nome):
-    query_lg = "SELECT * FROM books WHERE title LIKE %s"
-    list_books = execute_query(query_lg, ('%' + nome + '%',))
     return list_books
 
 
