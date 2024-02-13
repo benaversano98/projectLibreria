@@ -11,9 +11,41 @@
         window.location.hash = "start";
     </script>
     {% endif %}
-    <script>
-
-    </script>
+    <style>
+        .dropdown .dropbtn {
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: white;
+        padding: 14px 16px;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+    }
+        .navbar a:hover,
+    .dropdown:hover .dropbtn {
+        background-color: #9fd3c7;
+    }
+        .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+        .dropdown-content a {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+        .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    </style>
 </head>
 <body>
 <!--
@@ -40,12 +72,64 @@ NAVBAR
                     <a class="nav-link" href="/loan">Prestiti</a>
                 </li>
             </ul>
+            <!-- MODIFICA UTENTE -->
+            <div class="dropdown">
+                <button class="dropbtn">Modifica utente <i class="fa fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <H4>Id utente</H4>
+                    <form class="form-inline ml-auto" method="POST">
+                        <input class="form-control mr-sm-2" type="text" placeholder="ID Utente" name="mod_id_utente">
+                        <H4>Nuovi dati</H4>
+                        <input class="form-control mr-sm-2" type="text" placeholder="Nome Utente"
+                               name="new_nome_utente">
+                        <h6>Data di nascita:</h6>
+                        <input class="form-control mr-sm-2" type="text" placeholder="Anno di nascita"
+                               name="new_nascita_anno_utente">
+                        <input class="form-control mr-sm-2" type="text" placeholder="Mese di nascita"
+                               name="new_nascita_mese_utente">
+                        <input class="form-control mr-sm-2" type="text" placeholder="Giorno di nascita"
+                               name="new_nascita_giorno_utente">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
+                    </form>
+                </div>
+
+            </div>
+            <!-- ELIMINA UTENTE -->
+            <div class="dropdown">
+                <button class="dropbtn">Elimina utente <i class="fa fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <form class="form-inline ml-auto" method="POST">
+                        <input class="form-control mr-sm-2" type="text" placeholder="ID Utente" name="del_id_utente">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
+                    </form>
+                </div>
+
+            </div>
+
+
+            <!-- AGGIUNGI UTENTE -->
+            <div class="dropdown">
+                <button class="dropbtn">Aggiungi utente <i class="fa fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <form class="form-inline ml-auto" method="POST">
+                        <input class="form-control mr-sm-2" type="text" placeholder="Nome Utente" name="nome_utente">
+                        <h6>Data di nascita:</h6>
+                        <input class="form-control mr-sm-2" type="text" placeholder="Anno di nascita"
+                               name="nascita_anno_utente">
+                        <input class="form-control mr-sm-2" type="text" placeholder="Mese di nascita"
+                               name="nascita_mese_utente">
+                        <input class="form-control mr-sm-2" type="text" placeholder="Giorno di nascita"
+                               name="nascita_giorno_utente">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
+                    </form>
+                </div>
+
+            </div>
         </div>
     </div>
+    </div>
 </nav>
-<!--
-NEW RELEASES
--->
+
 <div class="text-center">
     <h1 class="display-1">Libreria Fantasy Store</h1>
     <button type="button" class="btn" data-bs-toggle="button" onclick="window.location.hash = 'start'">
@@ -56,9 +140,15 @@ NEW RELEASES
         </svg>
     </button>
 </div>
-<!--
-IMAGE
--->
+<!-- Popup -->
+{%if aggiunto or modificato or rimosso%}
+<dialog open>
+  <p>Operazione completata!</p>
+  <form method="dialog">
+    <button>OK</button>
+  </form>
+</dialog>
+{% endif %}
 <!-- Background image -->
 <img src="static\book_background.jpg" class="img-thumbnail" alt="book">
 

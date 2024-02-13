@@ -1,5 +1,7 @@
+import mysql
 import mysql.connector
 from flask import Flask, jsonify, render_template, request
+import datetime
 
 app = Flask(__name__)
 
@@ -32,19 +34,79 @@ def execute_query(query, params=None, dictionary=True):
     connection.close()
     return result
 
+def ex_query( query):
+    connection = create_db_connection()
+    cursor = connection.cursor()
+    try:
+        cursor.execute(query)
+        connection.commit()
+        #print("Query successful")
+    except Error as err:
+        print(query, f"Error: '{err}'")
+
 
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
     flag = True
     list_books = api_books()
+    modificato = False
+    rimosso = False
+    aggiunto = False
+
     if request.method == 'POST':
+
+        "modifica utenti"
+        mod_id_utente = request.form.get('mod_id_utente')
+        new_nome_utente = request.form.get('new_nome_utente')
+        new_nascita_anno_utente = request.form.get('new_nascita_anno_utente')
+        new_nascita_mese_utente = request.form.get('new_nascita_mese_utente')
+        new_nascita_giorno_utente = request.form.get('new_nascita_giorno_utente')
+        if (mod_id_utente and isinstance(int(mod_id_utente), int)) and (
+                new_nome_utente and new_nascita_anno_utente and new_nascita_mese_utente and new_nascita_giorno_utente):
+            isValidDate = True  # check if date is valid
+            try:
+                datetime.datetime(int(new_nascita_anno_utente), int(new_nascita_mese_utente),
+                                  int(new_nascita_giorno_utente))
+            except ValueError:
+                isValidDate = False
+
+            if isinstance(new_nome_utente, str) and (
+                    1900 < int(new_nascita_anno_utente) < datetime.datetime.now().year) and isValidDate:
+                ex_query(
+                    f"UPDATE users SET name='{new_nome_utente}',date_of_birth='{new_nascita_anno_utente}-{new_nascita_mese_utente}-{new_nascita_giorno_utente}' WHERE id = {mod_id_utente}")
+                modificato = True
+
+        "rimuovi utente"
+        del_id_utente = request.form.get('del_id_utente')
+        if del_id_utente and isinstance(int(del_id_utente), int):
+            ex_query(f"DELETE FROM users WHERE id = {del_id_utente}")
+            rimosso = True
+
+        "aggiungi utenti"
+        nome_utente = request.form.get('nome_utente')
+        nascita_anno_utente = request.form.get('nascita_anno_utente')
+        nascita_mese_utente = request.form.get('nascita_mese_utente')
+        nascita_giorno_utente = request.form.get('nascita_giorno_utente')
+
+        if (nome_utente and nascita_anno_utente and nascita_mese_utente and nascita_giorno_utente):
+            isValidDate = True  # check if date is valid
+            try:
+                datetime.datetime(int(nascita_anno_utente), int(nascita_mese_utente), int(nascita_giorno_utente))
+            except ValueError:
+                isValidDate = False
+
+            if isinstance(nome_utente, str) and (
+                    1900 < int(nascita_anno_utente) < datetime.datetime.now().year) and isValidDate:
+                ex_query(
+                    f"INSERT INTO `users`(`name`, `date_of_birth`) VALUES ('{nome_utente}','{nascita_anno_utente}-{nascita_mese_utente}-{nascita_giorno_utente}')")
+                aggiunto = True
         flag = False
         codice = request.form.get('Search')
         if codice:
             list_books = execute_query(
                 f"SELECT * FROM books WHERE title LIKE '%{codice}%' OR author LIKE '%{codice}%'")
     image, frase = "https://img00.deviantart.net/9088/i/2007/223/7/d/no_books_by_applejoan.jpg", "Non ci sono libri a questa ricerca."
-    return render_template("home.html", image=image, frase=frase, list_books=list_books, len=len, flag=flag)
+    return render_template("home.html", image=image, frase=frase, list_books=list_books, len=len, flag=flag, modificato= modificato, rimosso=rimosso, aggiunto=aggiunto)
 
 
 @app.route("/api/books")
