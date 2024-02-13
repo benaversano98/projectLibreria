@@ -14,7 +14,12 @@
     </script>
     <script>
         window.onload = (event) => {
-        const toastLiveExample = document.getElementById('liveToast');
+        const toastLiveExample = document.getElementById('liveToastEli');
+        const toast = new bootstrap.Toast(toastLiveExample);
+        toast.show();
+    };
+        window.onload = (event) => {
+        const toastLiveExample = document.getElementById('liveToastAgg');
         const toast = new bootstrap.Toast(toastLiveExample);
         toast.show();
     };
@@ -48,23 +53,17 @@ NAVBAR
         </div>
     </div>
 </nav>
-<div>
-    <!--
-    TITOLO E BOTTONI
-    -->
-    {% if flagtoast == True %}
-    <div class="toast-container position-absolute top-1 end-0">
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast">
+<!--
+TITOLO E BOTTONI
+-->
+{% if flagelimina == True %}
+<div class="toast-container position-absolute top-1 end-0">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="liveToastAgg">
         <div class="toast-header">
             <strong class="me-auto">NOTIFICA</strong>
-            {% if flagelimina == True %}
             <small>Eliminazione di prestito</small>
-            {% elif flagaggiungi == True %}
-            <small>Aggiornamiento dei prestiti</small>
-            {% endif %}
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
         </div>
-        {% if flagelimina == True %}
         <div class="toast-body">
             {% if len(elimina) == 0 %}
             Non sono state trovate corrispondenze per la rimozione. Controllare e riprovare.
@@ -72,7 +71,17 @@ NAVBAR
             Corrispondenza trovata. Rimozione effettuata
             {% endif %}
         </div>
-        {% elif flagaggiungi == True %}
+    </div>
+</div>
+{% endif %}
+{% if flagaggiungi == True %}
+<div class="toast-container position-absolute top-1 end-0">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="liveToastEli">
+        <div class="toast-header">
+            <strong class="me-auto">NOTIFICA</strong>
+            <small>Aggiornamiento dei prestiti</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+        </div>
         <div class="toast-body">
             {% if len(result) == 0 %}
             Aggiornamento completato con successo
@@ -80,97 +89,99 @@ NAVBAR
             Corrispondenza trovata. Rimozione effettuata
             {% endif %}
         </div>
-        {% endif %}
     </div>
-    </div>
-    {% endif %}
-    <h1 class="display-3 p-2">Prestiti <span><div class="btn-group" role="group"
-                                                  aria-label="Basic mixed styles example">
+</div>
+{% endif %}
+
+<h1 class="display-3 p-2">Prestiti <span><div class="btn-group" role="group"
+                                              aria-label="Basic mixed styles example">
     <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#EliminaPrestito">Elimina prestito</button>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AggiungiPrestito">Aggiungi prestito</button>
 </div></span></h1>
-    <div class="container-fluid mb-3">
-        <form class="d-flex" role="search" method="POST">
-            <input class="form-control me-2" type="search" placeholder="Ricerca nome o ID" aria-label="Search"
-                   name="Search">
-            <button class="btn btn-outline-success" type="submit">Cerca</button>
-        </form>
-    </div>
-    <!-- ELIMINA    -->
+<div class="container-fluid mb-3">
+    <form class="d-flex" role="search" method="POST">
+        <input class="form-control me-2" type="search" placeholder="Ricerca nome o ID" aria-label="Search"
+               name="Search">
+        <button class="btn btn-outline-success" type="submit">Cerca</button>
+    </form>
+</div>
+<!-- ELIMINA    -->
 
-    <div class="modal fade" id="EliminaPrestito" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="#EliminaPrestitoLabel">Elimina Prestito</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form role="search" method="POST">
-                        <div class="mb-3">
-                            <label for="id_utente_elimina" class="form-label" id="id_utente_elimina">ID
-                                Utente</label>
-                            <input type="text" class="form-control" placeholder="id utente" name="Eliminautente"
-                                   aria-label="id utente" aria-describedby="id_utente_elimina">
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_book_elimina" class="form-label" id="id_book_elimina"> ID
-                                Book:</label>
-                            <input type="text" class="form-control" placeholder="id book" aria-label="id book"
-                                   aria-describedby="id_book_elimina" name="Eliminabook">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiude</button>
-                            <button class="btn btn-danger" type="submit">Elimina</button>
-                        </div>
-                    </form>
-                </div>
+<div class="modal fade" id="EliminaPrestito" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="#EliminaPrestitoLabel">Elimina Prestito</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form role="search" method="POST">
+                    <div class="mb-3">
+                        <label for="id_utente_elimina" class="form-label" id="id_utente_elimina">ID
+                            Utente</label>
+                        <input type="text" class="form-control" placeholder="id utente" name="Eliminautente"
+                               aria-label="id utente" aria-describedby="id_utente_elimina">
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_book_elimina" class="form-label" id="id_book_elimina"> ID
+                            Book:</label>
+                        <input type="text" class="form-control" placeholder="id book" aria-label="id book"
+                               aria-describedby="id_book_elimina" name="Eliminabook">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiude</button>
+                        <button class="btn btn-danger" type="submit">Elimina</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- AGGIUNGI    -->
-    <div class="modal fade" id="AggiungiPrestito" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="AggiungiPrestitoLabel">Aggiungi Prestito</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form role="search" method="POST">
-                        <div class="mb-3">
-                            <label for="id_utente_aggiungi" class="form-label" id="id_utente_aggiungi">ID
-                                Utente</label>
-                            <input type="text" class="form-control" placeholder="id utente" name="Aggiungiutente"
-                                   aria-label="id utente" aria-describedby="id_utente_aggiungi">
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_book_aggiungi" class="form-label" id="id_book_aggiungi"> ID
-                                Book:</label>
-                            <input type="text" class="form-control" placeholder="id book" aria-label="id book"
-                                   aria-describedby="id_book_aggiungi" name="Aggiungibook">
-                        </div>
-                        <div class="mb-3">
-                            <label for="data_aggiungi" class="form-label" id="data_aggiungi">Data Prestito:</label>
+<!-- AGGIUNGI    -->
+<div class="modal fade" id="AggiungiPrestito" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="AggiungiPrestitoLabel">Aggiungi Prestito</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form role="search" method="POST">
+                    <div class="mb-3">
+                        <label for="id_utente_aggiungi" class="form-label" id="id_utente_aggiungi">ID
+                            Utente</label>
+                        <input type="text" class="form-control" placeholder="id utente" name="Aggiungiutente"
+                               aria-label="id utente" aria-describedby="id_utente_aggiungi">
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_book_aggiungi" class="form-label" id="id_book_aggiungi"> ID
+                            Book:</label>
+                        <input type="text" class="form-control" placeholder="id book" aria-label="id book"
+                               aria-describedby="id_book_aggiungi" name="Aggiungibook">
+                    </div>
+                    <div class="mb-3">
+                        <label for="data_aggiungi" class="form-label" id="data_aggiungi">Data Prestito:</label>
 
-                            <input type="text" class="form-control" id="datepicker" name="Aggiungidata"
-                                   aria-label="data prestito" aria-describedby="data_aggiungi">
-                            Format options:
-                            <select id="format">
-                                <option value="mm/dd/yy">Default - mm/dd/yy</option>
-                                <option value="yy-mm-dd">ISO 8601 - yy-mm-dd</option>
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiude</button>
-                            <button class="btn btn-success" type="submit">Aggiorna</button>
-                        </div>
-                    </form>
-                </div>
+                        <input type="text" class="form-control" id="datepicker" name="Aggiungidata"
+                               aria-label="data prestito" aria-describedby="data_aggiungi">
+                        Format options:
+                        <select id="format">
+                            <option value="mm/dd/yy">Default - mm/dd/yy</option>
+                            <option value="yy-mm-dd">ISO 8601 - yy-mm-dd</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiude</button>
+                        <button class="btn btn-success" type="submit">Aggiorna</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <!--PRESTITI-->
@@ -184,7 +195,8 @@ NAVBAR
                 <span><b> ID: </b> {{elem.user_id}}</span><span class="mx-3"><b> Nome: </b> {{elem.name}}</span>
             </button>
         </h2>
-        <div id="collapse{{loop.index}}" class="accordion-collapse collapse hide" data-bs-parent="#accordionExample">
+        <div id="collapse{{loop.index}}" class="accordion-collapse collapse hide"
+             data-bs-parent="#accordionExample">
             <div class="accordion-body">
                 <ul>
                     <li><b>Titoli presi in prestito:</b> {{elem.title}}</li>
