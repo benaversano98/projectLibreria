@@ -100,13 +100,12 @@ def homepage():
                 ex_query(
                     f"INSERT INTO `users`(`name`, `date_of_birth`) VALUES ('{nome_utente}','{nascita_anno_utente}-{nascita_mese_utente}-{nascita_giorno_utente}')")
                 aggiunto = True
-        flag = False
-        codice = request.form.get('Search')
-        if codice:
-            list_books = execute_query(
-                f"SELECT * FROM books WHERE title LIKE '%{codice}%' OR author LIKE '%{codice}%'")
+    codice = request.form.get('Search')
+    if codice:
+        list_books = execute_query(
+            f"SELECT * FROM books WHERE title LIKE '%{codice}%' OR author LIKE '%{codice}%'")
     image, frase = "https://img00.deviantart.net/9088/i/2007/223/7/d/no_books_by_applejoan.jpg", "Non ci sono libri a questa ricerca."
-    return render_template("home.html", image=image, frase=frase, list_books=list_books, len=len, flag=flag, modificato= modificato, rimosso=rimosso, aggiunto=aggiunto)
+    return render_template("home.html", image=image, frase=frase, list_books=list_books, len=len, flag=flag)
 
 
 @app.route("/api/books")
