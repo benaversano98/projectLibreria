@@ -1,5 +1,6 @@
 import mysql.connector
 from flask import Flask, jsonify, render_template, request
+from math import ceil
 
 app = Flask(__name__)
 
@@ -33,7 +34,6 @@ def execute_query(query, params=None, dictionary=True):
     return result
 
 
-################################ HOME HOME HOME HOME HOME HOME HOME HOME HOME HOME HOME  ##############################
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
     flag = True
@@ -41,22 +41,19 @@ def homepage():
     if request.method == 'POST':
         flag = False
         codice = request.form.get('Search')
-        # print("IL codice è ", codice)
         if codice:
-            list_books = execute_query(f"SELECT * FROM books WHERE title LIKE '%{codice}%' OR author LIKE '%{codice}%'")
-    image, frase ="https://img00.deviantart.net/9088/i/2007/223/7/d/no_books_by_applejoan.jpg", "Non ci sono libri a questa ricerca."
-    return render_template("home.html", list_books=list_books, flag=flag, image=image, frase=frase, len=len)
+            list_books = execute_query(
+                f"SELECT * FROM books WHERE title LIKE '%{codice}%' OR author LIKE '%{codice}% LIMIT {limit} OFFSET {offset}'")
+    image, frase = "https://img00.deviantart.net/9088/i/2007/223/7/d/no_books_by_applejoan.jpg", "Non ci sono libri a questa ricerca."
+    return render_template("home.html", image=image, frase=frase, list_books=list_books, len=len, flag=flag)
 
-@app.route("/home2")
-def home2():
-    return render_template("home2.html")
 
-################################ GENRES GENRES GENRES GENRES GENRES GENRES GENRES GENRES GENRES #######################
 @app.route("/api/books")
 def api_books():
-    query_lg = 'SELECT * FROM books'
+    query_lg = f'SELECT * FROM books'
     list_books = execute_query(query_lg)
-    return (list_books)
+    return list_books
+
 
 @app.route("/api/books/<nome>")
 def api_books_nome(nome):
@@ -64,17 +61,20 @@ def api_books_nome(nome):
     list_books = execute_query(query_lg, ('%' + nome + '%',))
     return list_books
 
+
 @app.route("/api/users")
 def api_users():
     query_lg = 'SELECT * FROM users'
     list_users = execute_query(query_lg)
     return jsonify(list_users)
 
+
 @app.route("/api/loan")
 def api_loan():
     query_lg = 'SELECT * FROM loan'
     list_loan = execute_query(query_lg)
     return jsonify(list_loan)
+
 
 @app.route("/loan")
 def loan():
@@ -87,6 +87,7 @@ def loan():
     list_loan = execute_query(query)
     # return jsonify(list_loan)
     return render_template("prestiti.html", list_loan=list_loan)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
