@@ -14,15 +14,10 @@
     </script>
     <script>
         window.onload = (event) => {
-        const toastLiveExample = document.getElementById('liveToastEli');
-        const toast = new bootstrap.Toast(toastLiveExample);
-        toast.show();
-    };
-        window.onload = (event) => {
-        const toastLiveExample = document.getElementById('liveToastAgg');
-        const toast = new bootstrap.Toast(toastLiveExample);
-        toast.show();
-    };
+  const toastLiveExample = document.getElementById('liveToast');
+  const toast = new bootstrap.Toast(toastLiveExample);
+  toast.show();
+};
     </script>
 </head>
 <body>
@@ -44,10 +39,10 @@ NAVBAR
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/loan">Prestiti</a>
+                    <a class="nav-link active" aria-current="page" href="/loan">Prestiti</a>
                 </li>
             </ul>
         </div>
@@ -58,7 +53,7 @@ TITOLO E BOTTONI
 -->
 {% if flagelimina == True %}
 <div class="toast-container position-absolute top-1 end-0">
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="liveToastAgg">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast">
         <div class="toast-header">
             <strong class="me-auto">NOTIFICA</strong>
             <small>Eliminazione di prestito</small>
@@ -73,10 +68,9 @@ TITOLO E BOTTONI
         </div>
     </div>
 </div>
-{% endif %}
-{% if flagaggiungi == True %}
+{% elif flagaggiunge == True %}
 <div class="toast-container position-absolute top-1 end-0">
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="liveToastEli">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast">
         <div class="toast-header">
             <strong class="me-auto">NOTIFICA</strong>
             <small>Aggiornamiento dei prestiti</small>
@@ -86,7 +80,7 @@ TITOLO E BOTTONI
             {% if len(result) == 0 %}
             Aggiornamento completato con successo
             {% else %}
-            Corrispondenza trovata. Rimozione effettuata
+            Ci sono errori nell'inserimento dei dati. Controllare e riprovare.
             {% endif %}
         </div>
     </div>
@@ -164,14 +158,8 @@ TITOLO E BOTTONI
                     </div>
                     <div class="mb-3">
                         <label for="data_aggiungi" class="form-label" id="data_aggiungi">Data Prestito:</label>
-
                         <input type="text" class="form-control" id="datepicker" name="Aggiungidata"
                                aria-label="data prestito" aria-describedby="data_aggiungi">
-                        Format options:
-                        <select id="format">
-                            <option value="mm/dd/yy">Default - mm/dd/yy</option>
-                            <option value="yy-mm-dd">ISO 8601 - yy-mm-dd</option>
-                        </select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiude</button>
